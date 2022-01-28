@@ -26,7 +26,10 @@ public class Player : MonoBehaviour
         CalculateMovement();
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
         {
-            ShootLaser();
+            _canFire = Time.time + _fireRate;
+            Vector3 laserOffset = transform.position + new Vector3(0, 0.8f, 0);
+            Instantiate(_laserPrefab, laserOffset, Quaternion.identity);
+            //ShootLaser();
         }
 
 
