@@ -12,6 +12,8 @@ public class Player : MonoBehaviour
     private float _fireRate = 0.5f;
     [SerializeField]
     private float _canFire = -1f;
+    [SerializeField]
+    private int _health = 5;
 
 
     // Start is called before the first frame update
@@ -26,12 +28,8 @@ public class Player : MonoBehaviour
         CalculateMovement();
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
         {
-            _canFire = Time.time + _fireRate;
-            Vector3 laserOffset = transform.position + new Vector3(0, 0.8f, 0);
-            Instantiate(_laserPrefab, laserOffset, Quaternion.identity);
-            //ShootLaser();
+            ShootLaser();
         }
-
 
         
     }
@@ -64,4 +62,12 @@ public class Player : MonoBehaviour
         Vector3 laserOffset = transform.position + new Vector3(0, 0.8f, 0);
         Instantiate(_laserPrefab, laserOffset, Quaternion.identity );
     }
+
+    public void Damage()
+    {
+        _health -= 1;
+        Debug.Log("Player has been damaged. New Health: " + _health);
+    }
+
+
 }
