@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _canFire = -1f;
     [SerializeField]
-    private int _health = 5;
+    private int _health = 3;
 
 
     // Start is called before the first frame update
@@ -66,7 +66,10 @@ public class Player : MonoBehaviour
     public void Damage()
     {
         _health -= 1;
-        Debug.Log("Player has been damaged. New Health: " + _health);
+        if (_health < 1)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
 
