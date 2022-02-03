@@ -15,11 +15,18 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int _health = 3;
 
+    private SpawnManager _spawnManager;
+
 
     // Start is called before the first frame update
     void Start()
     {
         transform.position = new Vector3(0, 0, 0);
+        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+        if (_spawnManager == null)
+        {
+            Debug.LogError("Spawn Manager is null in Player.");
+        }
     }
 
     // Update is called once per frame
@@ -68,6 +75,7 @@ public class Player : MonoBehaviour
         _health -= 1;
         if (_health < 1)
         {
+            _spawnManager.OnPlayerDeath();
             Destroy(this.gameObject);
         }
     }
