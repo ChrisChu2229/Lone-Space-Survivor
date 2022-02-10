@@ -14,6 +14,11 @@ public class Player : MonoBehaviour
     private float _canFire = -1f;
     [SerializeField]
     private int _health = 3;
+    [SerializeField]
+    private GameObject _tripleShotPrefab;
+    [SerializeField]
+    private bool _isTripleShotActive = false;
+
 
     private SpawnManager _spawnManager;
 
@@ -66,8 +71,14 @@ public class Player : MonoBehaviour
     {
         // This adds our fire rate to the current Time of the frame and assign the value to _canFire
         _canFire = Time.time + _fireRate;
-        Vector3 laserOffset = transform.position + new Vector3(0, 0.8f, 0);
-        Instantiate(_laserPrefab, laserOffset, Quaternion.identity );
+        if (_isTripleShotActive)
+        {
+            Instantiate(_tripleShotPrefab, transform.position + new Vector3(0, 1f, 0), Quaternion.identity);
+        }
+        else
+        {
+            Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
+        }
     }
 
     public void Damage()
@@ -79,6 +90,21 @@ public class Player : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
+
+    public void turnOnTripleShot()
+    {
+        _isTripleShotActive = true;
+        StartCoroutine(turnOffTripleShot());
+    }
+
+    IEnumerator turnOffTripleShot()
+    {
+        yield return new WaitForSeconds(5f);
+        _isTripleShotActive = false;
+    }
+
+    
+
 
 
 }

@@ -11,10 +11,17 @@ public class Laser : MonoBehaviour
     {
         transform.Translate(Vector3.up * _speed * Time.deltaTime);
         
-        if (transform.position.y >= 8f)
+        if (transform.position.y >= 9f)
         {
+            // check if this object has a parent.
+            // destroy the parent
+            if (transform.parent != null)
+            {
+                Destroy(transform.parent.gameObject);
+            }
             Destroy(this.gameObject);
         }
+
         
     }
 
