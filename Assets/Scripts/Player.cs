@@ -18,12 +18,17 @@ public class Player : MonoBehaviour
     private GameObject _tripleShotPrefab;
     [SerializeField]
     private bool _isTripleShotActive = false;
+    [SerializeField]
+    private bool _isSpeedBoostActive = false;
+    [SerializeField]
+    private bool _isShieldActive = false;
+    [SerializeField]
+    private GameObject _shields;
 
 
     private SpawnManager _spawnManager;
 
 
-    // Start is called before the first frame update
     void Start()
     {
         transform.position = new Vector3(0, 0, 0);
@@ -34,7 +39,6 @@ public class Player : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         CalculateMovement();
@@ -52,7 +56,14 @@ public class Player : MonoBehaviour
         float verticalInput = Input.GetAxis("Vertical");
         Vector3 direction = new Vector3(horizontalInput, verticalInput, 0);
 
-        transform.Translate(direction * _speed * Time.deltaTime);
+        if (_isSpeedBoostActive)
+        {
+            transform.Translate(direction * _speed * 3 * Time.deltaTime);
+        }
+        else
+        {
+            transform.Translate(direction * _speed * Time.deltaTime);
+        }
 
         transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -3.8f, 0), 0);
 
@@ -83,6 +94,18 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
+
+        if (_isShieldActive)
+        {
+            _isShieldActive = false;
+            _shields.gameObject.SetActive(false);
+            return;
+        }
+
+        // check if shield active
+        // do nothing
+        // deactive shield
+        // return
         _health -= 1;
         if (_health < 1)
         {
@@ -100,7 +123,33 @@ public class Player : MonoBehaviour
     IEnumerator turnOffTripleShot()
     {
         yield return new WaitForSeconds(5f);
-        _isTripleShotActive = false;
+        _isTripleShotActive = false; 
+    }
+
+    public void turnOnSpeedBoost()
+    {
+        _isSpeedBoostActive = true;
+        StartCoroutine(turnOffSpeedBoost());
+    }
+
+    IEnumerator turnOffSpeedBoost()
+    {
+        yield return new WaitForSeconds(5f);
+        _isSpeedBoostActive = false;
+    }
+
+    public void turnOnShields()
+    {
+        _isShieldActive = true;
+        _shields.gameObject.SetActive(true);
+        StartCoroutine(turnOffShields());
+    }
+
+    IEnumerator turnOffShields()
+    {
+        yield return new WaitForSeconds(7f);
+        _isShieldActive = false;
+        _shields.gameObject.SetActive(false);
     }
 
     

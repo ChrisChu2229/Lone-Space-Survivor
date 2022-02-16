@@ -10,17 +10,18 @@ public class SpawnManager : MonoBehaviour
     private float _spawnSpeed = 5f;
     [SerializeField]
     private GameObject _enemyContainer;
-
+    [SerializeField]
+    private GameObject[] _powerupList;
+    [SerializeField]
     private bool _stopSpawning = false;
-    // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(SpawnRoutine());
+        StartCoroutine(SpawnEnemyRoutine());
+        StartCoroutine(SpawnPowerupRoutine());
     }
 
 
-
-    private IEnumerator SpawnRoutine()
+    private IEnumerator SpawnEnemyRoutine()
     {
         while (_stopSpawning == false)
         {
@@ -30,6 +31,20 @@ public class SpawnManager : MonoBehaviour
             newEnemy.transform.parent = _enemyContainer.transform;
             yield return new WaitForSeconds(_spawnSpeed);
         }
+    }
+
+    private IEnumerator SpawnPowerupRoutine()
+    {
+        while (_stopSpawning == false)
+        {
+            float randomX = Random.Range(-5f, 5f);
+            Vector3 powerupPos = new Vector3(randomX, 7, 0);
+            int randomTime = Random.Range(3, 8);
+            int randomPowerup = Random.Range(0, 3);
+            Instantiate(_powerupList[randomPowerup], powerupPos, Quaternion.identity);
+            yield return new WaitForSeconds(randomTime);
+        }
+
     }
 
     public void OnPlayerDeath()

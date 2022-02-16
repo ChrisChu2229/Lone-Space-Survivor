@@ -13,12 +13,12 @@ public class Laser : MonoBehaviour
         
         if (transform.position.y >= 9f)
         {
-            // check if this object has a parent.
-            // destroy the parent
+
             if (transform.parent != null)
             {
                 Destroy(transform.parent.gameObject);
             }
+            
             Destroy(this.gameObject);
         }
 
