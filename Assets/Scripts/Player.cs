@@ -24,18 +24,26 @@ public class Player : MonoBehaviour
     private bool _isShieldActive = false;
     [SerializeField]
     private GameObject _shields;
+    [SerializeField]
+    private int _score;
 
 
     private SpawnManager _spawnManager;
+    private UIManager _uiManager;
 
 
     void Start()
     {
         transform.position = new Vector3(0, 0, 0);
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         if (_spawnManager == null)
         {
-            Debug.LogError("Spawn Manager is null in Player.");
+            Debug.LogError("Spawn Manager is NULL in Player.");
+        }
+        if (_uiManager == null)
+        {
+            Debug.LogError("UI Manager is NULL in Player.");
         }
     }
 
@@ -107,6 +115,9 @@ public class Player : MonoBehaviour
         // deactive shield
         // return
         _health -= 1;
+
+        _uiManager.updateLives(_health);
+
         if (_health < 1)
         {
             _spawnManager.OnPlayerDeath();
@@ -152,8 +163,12 @@ public class Player : MonoBehaviour
         _shields.gameObject.SetActive(false);
     }
 
-    
+    public void updateScore(int points)
+    {
+        _score += points;
+        _uiManager.updateScoreText(_score);
 
+    }
 
 
 }
