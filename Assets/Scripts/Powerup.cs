@@ -12,6 +12,7 @@ public class Powerup : MonoBehaviour
     [SerializeField]
     private int powerupID;
 
+
     // Update is called once per frame
     void Update()
     {

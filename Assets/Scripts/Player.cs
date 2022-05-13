@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
     private float _canFire = -1f;
     [SerializeField]
     private int _health = 3;
+
     [SerializeField]
     private GameObject _tripleShotPrefab;
     [SerializeField]
@@ -24,8 +25,19 @@ public class Player : MonoBehaviour
     private bool _isShieldActive = false;
     [SerializeField]
     private GameObject _shields;
+
     [SerializeField]
     private int _score;
+
+    [SerializeField]
+    private GameObject _rightEngineDamage;
+    [SerializeField]
+    private GameObject _leftEngineDamage;
+
+    [SerializeField]
+    private AudioSource _laserSoundEffect;
+    [SerializeField]
+    private AudioSource _powerupSoundEffect;
 
 
     private SpawnManager _spawnManager;
@@ -35,7 +47,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         transform.position = new Vector3(0, 0, 0);
-        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+        _spawnManager = GameObject.FindGameObjectWithTag("SpawnManager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         if (_spawnManager == null)
         {
@@ -45,6 +57,7 @@ public class Player : MonoBehaviour
         {
             Debug.LogError("UI Manager is NULL in Player.");
         }
+        
     }
 
     void Update()
@@ -98,6 +111,8 @@ public class Player : MonoBehaviour
         {
             Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
         }
+
+        _laserSoundEffect.Play();
     }
 
     public void Damage()
@@ -110,11 +125,15 @@ public class Player : MonoBehaviour
             return;
         }
 
-        // check if shield active
-        // do nothing
-        // deactive shield
-        // return
         _health -= 1;
+        if (_health == 2)
+        {
+            _rightEngineDamage.gameObject.SetActive(true);
+        }
+        else if (_health == 1)
+        {
+            _leftEngineDamage.gameObject.SetActive(true);
+        }
 
         _uiManager.updateLives(_health);
 
@@ -127,6 +146,7 @@ public class Player : MonoBehaviour
 
     public void turnOnTripleShot()
     {
+        _powerupSoundEffect.Play();
         _isTripleShotActive = true;
         StartCoroutine(turnOffTripleShot());
     }
@@ -139,6 +159,7 @@ public class Player : MonoBehaviour
 
     public void turnOnSpeedBoost()
     {
+        _powerupSoundEffect.Play();
         _isSpeedBoostActive = true;
         StartCoroutine(turnOffSpeedBoost());
     }
@@ -151,6 +172,7 @@ public class Player : MonoBehaviour
 
     public void turnOnShields()
     {
+        _powerupSoundEffect.Play();
         _isShieldActive = true;
         _shields.gameObject.SetActive(true);
         StartCoroutine(turnOffShields());
@@ -169,6 +191,7 @@ public class Player : MonoBehaviour
         _uiManager.updateScoreText(_score);
 
     }
+
 
 
 }
