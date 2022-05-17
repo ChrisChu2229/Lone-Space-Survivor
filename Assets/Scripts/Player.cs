@@ -43,6 +43,13 @@ public class Player : MonoBehaviour
     private SpawnManager _spawnManager;
     private UIManager _uiManager;
 
+    // Framework
+    [SerializeField]
+    private int _ammoCount = 15;
+    [SerializeField]
+    private AudioSource _ammoErrorSound;
+    
+
 
     void Start()
     {
@@ -65,10 +72,15 @@ public class Player : MonoBehaviour
         CalculateMovement();
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
         {
-            ShootLaser();
+            if (_ammoCount > 0)
+            {
+                ShootLaser();
+            }
+            else
+            {
+                _ammoErrorSound.Play();
+            }
         }
-
-        
     }
 
     void CalculateMovement()
@@ -102,6 +114,8 @@ public class Player : MonoBehaviour
     void ShootLaser()
     {
         // This adds our fire rate to the current Time of the frame and assign the value to _canFire
+        _ammoCount--;
+        _uiManager.updateAmmoCountText(_ammoCount);
         _canFire = Time.time + _fireRate;
         if (_isTripleShotActive)
         {
@@ -189,7 +203,12 @@ public class Player : MonoBehaviour
     {
         _score += points;
         _uiManager.updateScoreText(_score);
+    }
 
+    public void addAmmo()
+    {
+        _ammoCount += 15;
+        _uiManager.updateAmmoCountText(_ammoCount);
     }
 
 

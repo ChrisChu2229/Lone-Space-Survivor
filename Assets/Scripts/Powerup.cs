@@ -9,6 +9,7 @@ public class Powerup : MonoBehaviour
     // 0 = triple shot
     // 1 = speed
     // 2 = shield
+    // 3 = add ammo
     [SerializeField]
     private int powerupID;
 
@@ -41,6 +42,9 @@ public class Powerup : MonoBehaviour
                         break;
                     case 2:
                         player.turnOnShields();
+                        break;
+                    case 3:
+                        player.addAmmo();
                         break;
                     default:
                         break;

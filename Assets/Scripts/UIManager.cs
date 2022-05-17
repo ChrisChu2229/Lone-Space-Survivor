@@ -18,9 +18,14 @@ public class UIManager : MonoBehaviour
     private Text _restartText;
     private GameManager _gameManager;
 
+    // Framework
+    [SerializeField]
+    private Text _ammoCountText;
+
     void Start()
     {
         _scoreText.text = "Score: 0";
+        _ammoCountText.text = "Ammo Count: 15";
         _gameOverText.gameObject.SetActive(false);
         _restartText.gameObject.SetActive(false);
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
@@ -31,10 +36,14 @@ public class UIManager : MonoBehaviour
     }
 
 
-
     public void updateScoreText(int score)
     {
         _scoreText.text = "Score: " + score;
+    }
+
+    public void updateAmmoCountText(int ammo)
+    {
+        _ammoCountText.text = "Ammo Count: " + ammo;
     }
 
     public void updateLives(int currentLives)
